@@ -2,7 +2,7 @@
 
     /**
      * @package faacebook
-     * @author Peter Nemeth
+     * @author Peter Nemeth, sokkis@gmail.com
      * Facebook permissions class
      */
 
