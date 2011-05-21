@@ -1,10 +1,10 @@
 <?php
-/**
- * @package facebook
- * @author Peter Nemeth
- * @copyright 2011
- * @version 1.0
- */
+
+    /**
+     * @package facebook
+     * @author Peter Nemeth, sokkis@gmail.com
+     * @version v1.0
+     */
 
 /**
  * Base class for facebook classes and objects.
@@ -92,7 +92,7 @@ class FacebookBase implements arrayaccess
     function buildall($class,$json)
     {
         $ret = array();
-        if(!isset($json['data']) ) throw new Exception("Hé");
+        if(!isset($json['data']) ) throw new Exception("HÃ©");
         foreach($json['data'] as $k => $v)
         {            
             $ret[]=$this->build($class,$v);
