@@ -1,10 +1,11 @@
 <?php
-/**
- * @package facebook
- * @author Peter Nemeth
- * @version v1.0
- * 
- */
+
+    /**
+     * @package facebook
+     * @author Peter Nemeth, sokkis@gmail.com
+     * @version v1.0
+     */
+
 
 /**
  * Facebook service api
