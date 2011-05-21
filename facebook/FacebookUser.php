@@ -2,7 +2,7 @@
 
      /**
       * @package facebook
-      * @author Peter Nemeth
+      * @author Peter Nemeth, sokkis@gmail.com
       * @version 1.0
       */
 
