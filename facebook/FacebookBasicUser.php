@@ -1,9 +1,11 @@
 <?php
-/**
- * @package facebook
- * @author Peter Nemeth
- * @copyright 2011
- */
+
+    /**
+     * @package facebook
+     * @author Peter Nemeth, sokkis@gmail.com
+     * @version v1.0
+     */
+
 
 /**
  * FacebookBasicUser class
