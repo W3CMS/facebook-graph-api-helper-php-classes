@@ -4,7 +4,7 @@
      * FacebookComment
      * Class for comment on post 
      * @package facebook
-     * @author Peter Nemeth
+     * @author Peter Nemeth, sokkis@gmail.com
      * @copyright Peter Nemeth
      * @version 1.0
      */
