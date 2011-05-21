@@ -1,7 +1,7 @@
 <?php
 /**
  * @package facebook
- * @author Peter Nemeth
+ * @author Peter Nemeth, sokkis@gmail.com
  * @copyright 2011
  */
 
