@@ -4,7 +4,9 @@
 = Introduction =
 
 * See example.php!
+
 * Edit facebook/FacebookSettings.php then you are done!
+
 * The source is documented, and propably readable. :)
 
 Have a fun with facebook!
