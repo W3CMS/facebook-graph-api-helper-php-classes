@@ -8,7 +8,7 @@
 /**
  * FacebookPost
  * Class for FaceBook wall posts
- * @package facebook  
+ * @package facebook
  * @author Peter Nemeth
  * @copyright Peter Nemeth
  * @version 1.0
@@ -17,60 +17,67 @@
 
 class FacebookPost extends FacebookBase
 {
+
+    /**
+     * Last error message from facebook
+     * @var string $lasterror
+     */
+    public $lasterror;
+
     /**
      * Post id
      * @var string $id;
-     */     
+     */
     public $id;
-    
+
     /**
      * Information about the user who posted the message
      * A FaceboookUser object, who posted the message
      * @var FacebookUser $from
-     */          
+     */
     public $from;
-    
+
     /**
      * Profiles mentioned or targeted in this post
      * A list of FacebookUser
      * @var array $to
-     */          
+     */
     public $to = 'me';
-    
+
     /**
-     * The message     
+     * The message
      * @var string $message
-     */          
+     */
     public $message;
-    
+
     /**
      * Contains the URL of the picture, what attached to the post (if attached any)
      * @var string $picture
-     */          
+     */
     public $picture;
-    
+
     /**
      * The URL where the main link is points
      * @var string $link
      */
     public $link;
-    
+
     /**
      * The name of the link
      * @var string $name
-     */     
+     */
     public $name;
-    
+
     /**
      * The caption of the link (appears beneath the link name)
      * @var string $caption
      */
     public $caption;
-    
+
     /**
      * A description of the link (appears beneath the link caption)
      * @var string $description
-     */ 
+     */
     public $description;
 
     /**
@@ -78,30 +85,30 @@ class FacebookPost extends FacebookBase
      * @var string $source
      */
     public $source;
-    
+
     /**
      * A link to an icon representing the type of this post
      * @var string $icon
-     */     
+     */
     public $icon;
-    
+
     /**
      * A object indicating which application was used to create this post
      * @var object $application
      */
     public $application;
-    
+
     /**
      * A list of available actions on the post
      * (including commenting, liking, and an optional app-specified action)
      * @var array $actions
      */
     public $actions;
-    
+
     /**
      * The privacy settings of the Post
      * An object containing the value field and optional friends, networks, allow and deny fields.
-     * 
+     *
      * The value field may specify one of the following strings: EVERYONE, CUSTOM, ALL_FRIENDS, NETWORKS_FRIENDS, FRIENDS_OF_FRIENDS.<br />
      * The friends field must be specified if value is set to CUSTOM and contain one of the following JSON strings: EVERYONE, NETWORKS_FRIENDS (when the object can be seen by networks and friends), FRIENDS_OF_FRIENDS, ALL_FRIENDS, SOME_FRIENDS, SELF, or NO_FRIENDS (when the object can be seen by a network only).<br />
      * The networks field may contain a comma-separated list of network IDs that can see the object, or 1 for all of a user's network.<br />
@@ -113,14 +120,14 @@ class FacebookPost extends FacebookBase
      * @var string $privacy
      */
     public $privacy;
-    
+
     /**
      * The time the post was initially published
      * A string containing a IETF RFC 3339 datetime
      * @var string $created_time
      */
     public $created_time;
-    
+
     /**
      * The time of the last comment on this post
      * A string containing a IETF RFC 3339 datetime
@@ -134,7 +141,7 @@ class FacebookPost extends FacebookBase
      * @var object $targeting
      */
     public $targeting;
-    
+
     /**
      * All of the comments on this post
      * An array of objects containing $id, @link FacebookPost::$from, @link FacebookPost::$message and @link FacebookPost::created_time fields
@@ -142,55 +149,65 @@ class FacebookPost extends FacebookBase
      * @var array $comments
      */
     public $comments;
-    
+
     /**
      * The likes on this post
      * Available to everyone on Facebook
      * An array of FacebookUser @see FacebookUser
      */
-    public $likes;    
-        
-        
+    public $likes;
+
+
     /**
      * Creates a new instance of FacebookPost
      * @param string $id The optional id of the Post
-     */ 
+     */
     function __construct($id=null)
     {
         parent::__construct();
-        $this->need("read_stream");
         if($id)
         {
+            $this->need("read_stream");
             $this->id = $id;
             $this->load();
         }
     }
-    
+
     /**
      * Loads the post data from facebook into the class
-     */ 
-    
+     */
+
     function load()
     {
         $this->need("read_stream");
         $a = $this->api->api("/{$this->id}");
         if(is_array($a)) $this->fill($a);
+        $l = $this->likes;
+        if($l)
+            $this->likes = $this->buildall("FacebookUser",$l);
+        $c = $this->comments;
+        if($c)
+            $this->comments = $this->buildall("FacebookComment",$c);
     }
-    
+
     /**
      * Publish this post to the facebook wall
      * @return bool
-     */ 
-    function publish()
+     */
+    public function publish()
     {
-        $this->need("publish_stream");
-                        
+        if(empty($this->access_token) )
+        {
+            $this->need("publish_stream");
+        }
+
         $attachment = array('message' => '',
                             'name' => '',
                             'caption' => '',
                             'link' => '',
                             'description' => '',
                             'picture' => '',
+                            'access_token'=>'',
                             'actions' => array()
                             );
 
@@ -200,32 +217,33 @@ class FacebookPost extends FacebookBase
             {
                 unset($attachment[$k]);
                 continue;
-            }            
+            }
             $attachment[$k] = $this->$k;
         }
-        
+
         try
         {
             $ids = $this->api->api('/'.$this->to.'/feed/','post',$attachment);
         }
         catch(Exception $e)
         {
+            $this->lasterror = $e->getmessage();
             return false;
         }
         $this->id = $ids['id'];
-        return true;
+        return $this->id;
     }
-    
+
     /**
      * Delete this post from the wall
-     */ 
+     */
     public function delete()
     {
         $this->need("publish_stream");
         $this->api->api("/{$this->id}","delete",null);
     }
-    
-    
+
+
 }
 
 ?>
