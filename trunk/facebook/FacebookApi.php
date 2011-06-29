@@ -20,13 +20,13 @@ class FacebookApi
     public static $api = null;
 
     protected $session   = null;
-    public   $facebook  = null;
+    public    $facebook  = null;
     public    $user      = null;
 
-    public $permissions = null;
-    private $_perms = null;
+    public    $permissions = null;
+    private   $_perms     = null;
 
-    private $cache = array();
+    private   $cache      = array();
 
     /**
      * constructor
@@ -158,7 +158,6 @@ class FacebookApi
         if(!isset($this->cache[$request]))
             if($method)
             {
-
                 $this->cache[$request] = $this->facebook->api($request,$method,$att);
             }
             else
@@ -168,6 +167,19 @@ class FacebookApi
          return $this->cache[$request];
     }
 
+
+    /**
+     * Executes FQL Query
+     * @param string query
+     */ 
+    function query($query)
+    {
+        return $this->facebook->api(array(
+            'method'=>'fql.query',
+            'query'=>$query
+        ));
+    } 
+     
     function __destruct()
     {
 
