@@ -21,16 +21,20 @@
     // Create permissions...
     $perms = new FacebookPermissions;
     $perms->user_birthday = true;
-    // Get facebook api instance
 
+    // Get facebook api instance
     $api = FacebookApi::getInstance($perms);
 
-    // If need additional perms, change them
-    $perms->user_about_me = true;
-
-    $api->changePerms($perms);
+    // If need additional perms, change them anytime
+    // $perms->user_about_me = true;
+    // $api->changePerms($perms);
 
     print_r($api->user); // The current user
+
+    // upload a photo
+    $p = new FacebookPhoto();
+    $p->addNew($api->facebook->getAccessToken() ,"example.jpg","","A Wonder Tree!");
+
 
 /*
 //  Uncomment to create post on your wall
