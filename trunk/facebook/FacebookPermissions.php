@@ -263,12 +263,13 @@
          */
         public function need($perm)
         {
+            //echo $perm.": ".$this->{$perm};
             if($this->{$perm})
             {
                 return;
             }
             $p = clone $this;
-            $p->{$perm} = false;
+            $p->{$perm} = true;
             FacebookApi::getInstance()->changePerms($p,false);
         }
 
@@ -277,10 +278,11 @@
             $ret = array();
             foreach($this as $k=>$v)
             {
-                if($v)
-                {
-                    $ret[]=$k;
-                }
+                if($k!='installed')
+                    if($v)
+                    {
+                        $ret[]=$k;
+                    }
             }
             return implode(',',$ret);
         }

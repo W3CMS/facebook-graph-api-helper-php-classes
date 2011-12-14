@@ -198,8 +198,10 @@ class FacebookPost extends FacebookBase
     {
         if(empty($this->access_token) )
         {
+
             $this->need("publish_stream");
         }
+
 
         $attachment = array('message' => '',
                             'name' => '',

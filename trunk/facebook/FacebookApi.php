@@ -53,24 +53,20 @@ class FacebookApi
                 "cookie"=>true
             );
         }
+        Facebook::$CURL_OPTS[CURLOPT_SSL_VERIFYPEER] = false;
         $this->facebook = new Facebook($facebookSettings);
-        $this->session = $this->facebook->getSession();
 
         $uid = null;
-       $this->user = null;
+        $this->user = null;
         try
         {
-            if($this->session)
-            {
-                $uid = $this->facebook->getUser();
-            }
+            $uid = $this->facebook->getUser();
             if(!$uid)
             {
                 $this->user = null;
                 return;
                 $this->changePerms($permissions);
             }
-            //$this->permissions = $permissions;
             $this->user = new FacebookUser();
             $this->permissions = $this->user->permissions;
             $this->_perms = $this->user->permissions;
@@ -122,11 +118,13 @@ class FacebookApi
 
     public function changePerms($permissions, $force = false, $next='')
     {
+
         if($this->needauth($permissions) || $force )
         {
             header("Location: ".$this->getLoginUrl($permissions,$next));
             die();
         }
+        return;
     }
 
     /**
@@ -139,10 +137,7 @@ class FacebookApi
     {
      $next = $next?$next:"http://{$_SERVER['REQUEST_URI']}";
      $params = array(
-        'req_perms'=>strval($permissions)
-        //'next'=>$next
-//        'fbconnect'=>0,
-//        'canvas' => 0
+        'scope'=>strval($permissions)
      );
      $this->permissions = $permissions;
      return $this->facebook->getLoginUrl($params);
@@ -171,15 +166,15 @@ class FacebookApi
     /**
      * Executes FQL Query
      * @param string query
-     */ 
+     */
     function query($query)
     {
         return $this->facebook->api(array(
             'method'=>'fql.query',
             'query'=>$query
         ));
-    } 
-     
+    }
+
     function __destruct()
     {
 
