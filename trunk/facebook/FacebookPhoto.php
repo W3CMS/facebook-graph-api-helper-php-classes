@@ -77,15 +77,15 @@
             return $this->buildall("FacebookBasicUser",$this->api->api("/{$this->id}/likes"));
         }
 
-        public function addNew($id, $file_path, $album_id="", $caption="Picture")
+        public function addNew($id, $FILE_PATH,$ALBUM_ID="",$caption="Kép")
         {
             $this->api->facebook->setFileUploadSupport(true);
             $args = array('message' => $caption);
-            $args['image'] = '@' . realpath($file_path);
+            $args['image'] = '@' . realpath($FILE_PATH);
             $args['method']='photos.upload';
-            $data = $this->api->api("/{$album_id}/photos", 'post', $args);
+            $data = $this->api->api("/{$ALBUM_ID}/photos", 'post', $args);
+            return $data['id'];
         }
-
 
     }
 
