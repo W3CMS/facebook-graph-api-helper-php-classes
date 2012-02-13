@@ -65,7 +65,6 @@ class FacebookApi
             {
                 $this->user = null;
                 return;
-                $this->changePerms($permissions);
             }
             $this->user = new FacebookUser();
             $this->permissions = $this->user->permissions;
@@ -73,6 +72,12 @@ class FacebookApi
         }
         catch(Exception $e)
         {
+            if(!$facebookSettings['appId']) {
+            	$facebookSettings['appId']='_';
+            }
+        	setcookie('fbs_'.$facebookSettings['appId'],'',time()-3600);
+            $this->user = null;
+            $this->session = null;
             return;
         }
     }
